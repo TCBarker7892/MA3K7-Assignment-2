@@ -1,0 +1,26 @@
+import numpy as np
+from itertools import combinations as comb
+
+#This code counts the number of possible games that can be played when player 1 starts and n=3, and how many are won by each player
+
+n = 3
+zeroWinCount = 0
+oneWinCount = 0
+
+indicies = np.arange(n**2)
+numPlayerOneTurns = np.ceil(n**2/2).astype('int64')
+indexSubsets = list(comb(indicies, numPlayerOneTurns)) # Creates a list of all possible games
+    
+for i in range(len(indexSubsets)):
+    currentGame = indexSubsets[i]
+    matrix = np.zeros((n,n))
+    
+    for j in range(numPlayerOneTurns):
+        matrix[currentGame[j]//n, currentGame[j]%n] = 1
+        
+    if np.linalg.det(matrix).astype('int64')==0:
+        zeroWinCount += 1
+    else:
+        oneWinCount += 1
+    
+print("There are "+str(len(indexSubsets))+" different games when player 1 begins for n=3; player 0 wins "+str(zeroWinCount)+" games and player 1 wins "+str(oneWinCount))
